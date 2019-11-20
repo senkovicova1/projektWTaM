@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
 import { Alert,Button } from 'reactstrap';
+import Vec from "./vec";
 
-export default class Navigation extends Component {
+export default class Quiz extends Component {
   constructor(props){
     super(props);
     this.state = {
       vec: [],
+      prop: "Som prop od Quiz",
     }
   }
   render(){
@@ -19,6 +21,8 @@ export default class Navigation extends Component {
           onClick={() => this.props.history.push("/")}>
           Click here to go back
         </Button>
+
+        <Vec pozdrav={this.state.prop} napisNieco={() => console.log("pisem nieco")}/>
       </div>
     )
   }
