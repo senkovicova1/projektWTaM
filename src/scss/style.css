@@ -1,1 +1,7 @@
-
+.home {
+  height: auto;
+  font-size: 22px;
+  font-family: Verdana, Georgia, serif;
+  width: 1000px;
+  margin: 0 auto;
+}
