@@ -4,6 +4,7 @@ import {rebase} from "../index";
 import firebase from 'firebase';
 import { DndProvider } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
+import Header from '../header';
 
 export default class Navigation extends Component {
   constructor(props){
@@ -42,6 +43,7 @@ export default class Navigation extends Component {
   render(){
     return(
       <div style={{padding: "20px"}}>
+      <Header />
           <DndProvider backend={HTML5Backend}>
             <Testing results={this.state.results} images={this.state.images}/>
           </DndProvider>
