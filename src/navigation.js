@@ -3,6 +3,8 @@ import {Route} from 'react-router-dom';
 
 import Quiz from "./quiz";
 import MainMenu from "./mainMenu";
+import Header from "./header";
+import Footer from "./footer";
 
 export default class Navigation extends Component {
   constructor(props){
@@ -14,10 +16,12 @@ export default class Navigation extends Component {
 
   render(){
     return(
-      <div>
+      <React.Fragment>
+        <Route path='/' component={Header} />
         <Route exact path='/' component={MainMenu} />
         <Route path='/quiz' component={Quiz} />
-      </div>
+        <Route path='/' component={Footer} />
+      </React.Fragment>
     )
   }
 }

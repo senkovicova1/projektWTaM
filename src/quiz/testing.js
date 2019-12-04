@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import Pinovina from "./pinovina";
 import Wrapper from "./wrapper";
 import { Button } from 'reactstrap';
 
@@ -74,19 +73,12 @@ export default class Testing extends Component {
   render(){
     console.log("ANSWER " + this.state.answerStatus);
     return(
-      <div>
+      <React.Fragment>
         {this.state.reaction &&
           <h1>
             Fill in the missing parts of the {this.state.reaction.name}
           </h1>
         }
-        <Button
-          color="warning"
-          onClick={() => this.createQuestion()}
-          style={{marginBottom: "20px"}}>
-          New Question
-        </Button>
-
         {this.state.reaction &&
           this.state.reactionImages &&
          this.state.reactionImages.length > 0 &&
@@ -105,25 +97,15 @@ export default class Testing extends Component {
             />
         }
         <div>
-
-        {this.state.reaction && false &&
-          <Pinovina
-            reaction={this.state.reaction}
-            reactionImages={this.state.reactionImages}
-            setReactionAnswer={(index, imgId) => {
-                  let newAnswer = [...this.state.reactionAnswer];
-                  newAnswer.splice(index, 1, imgId);
-                  this.setState({
-                    reactionAnswer: newAnswer,
-                  }, () => this.checkAnswer())
-                }
-              }
-            />
-        }
         </div>
 
-
-      </div>
+        <Button
+          color="warning"
+          onClick={() => this.createQuestion()}
+          >
+          New Question
+        </Button>
+      </React.Fragment>
     )
   }
 }

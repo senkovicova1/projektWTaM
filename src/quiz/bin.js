@@ -69,8 +69,12 @@ export const Dustbin = ({
 
   return connectDropTarget(
     <div style={{ ...style, backgroundColor, border, ...typeStyle[type] }}>
+      {!isActive && !lastDroppedItem
+      ? <p>Drop here</p>
+      : ""}
+
       {isActive
-        ? 'Release to drop'
+        ? <p>Release to drop</p>
         : ""}
 
       {lastDroppedItem && (

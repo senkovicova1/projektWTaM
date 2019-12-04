@@ -69,19 +69,30 @@ export default class Wrapper extends Component {
   render(){
     console.log(this.state.answerStatus);
     return(
-      <div>
-        <div>
-          <Container style={{width: "750px"}}>
-           {
-             this.state.images.map((_, index) =>
-               {
-                 if(index%4 !== 0) return null;
-                 return (
-                   <Row key={index}>
-                     {
-                       [...this.state.images]
-                       .splice(index, index+4)
-                       .map((val) =>
+      <div className="main">
+      <div className="dustbin">
+        <div className="rel" style={{position: "relative", paddingBottom:"350px"}}>
+        {
+          this.state.spaces.map(({id, type, lastDroppedItem, correctItem, accepts}, index) => (
+            <Dustbin
+              key={id}
+              id={id}
+              accepts={accepts}
+              type={type}
+              lastDroppedItem={lastDroppedItem}
+              onDrop={item => this.handleDrop(id, item)}
+              structure={this.state.reaction.structure}
+              goodAnswer={lastDroppedItem && this.state.answerStatus != 0 ? (correctItem === lastDroppedItem.id ? 1 : -1) : 0}
+            />
+          ))
+        }
+        </div>
+      </div>
+
+
+        <div className="boxes">
+          {
+             this.state.images.map((val, index) =>
                            <Box
                              url={val.url}
                              id={val.id}
@@ -89,34 +100,11 @@ export default class Wrapper extends Component {
                              isDropped={false}
                              key={val.id}
                            />
-                       )
-                     }
-                   </Row>
-                 );
-               }
-             )
-           }
-         </Container>
-
+              )
+            }
         </div>
 
-        <div style={{marginTop: "100px"  }}>
-          <div style={{position: "relative" }}>
-             {this.state.spaces.map(({id, type, lastDroppedItem, correctItem, accepts}, index) => (
-              <Dustbin
-                key={id}
-                id={id}
-                accepts={accepts}
-                type={type}
-                lastDroppedItem={lastDroppedItem}
-                onDrop={item => this.handleDrop(id, item)}
-                structure={this.state.reaction.structure}
-                goodAnswer={lastDroppedItem && this.state.answerStatus != 0 ? (correctItem === lastDroppedItem.id ? 1 : -1) : 0}
-              />
-            ))
-          }
-          </div>
-        </div>
+
 
 
       </div>
