@@ -5,7 +5,7 @@ import firebase from 'firebase';
 import { DndProvider } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 
-export default class Navigation extends Component {
+export default class Quiz extends Component {
   constructor(props){
     super(props);
     this.state = {
@@ -41,11 +41,11 @@ export default class Navigation extends Component {
 
   render(){
     return(
-      <div style={{padding: "20px"}}>
+      <section className="quiz">
           <DndProvider backend={HTML5Backend}>
             <Testing results={this.state.results} images={this.state.images}/>
           </DndProvider>
-      </div>
+      </section>
     )
   }
 }
