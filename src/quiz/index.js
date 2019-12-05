@@ -21,7 +21,7 @@ export default class Quiz extends Component {
     }).then(data => {
       let storage = firebase.storage().ref();
       //"https://firebasestorage.googleapis.com/v0/b/awesometeamone-8ab5b.appspot.com/o/default%2F7.jpg?alt=media&token=b8f0423a-f33c-476f-9caa-b3e30b8ab094"
-      for (var i = 1; i <= 12; i++) {
+      for (var i = 1; i <= 67; i++) {
         storage.child(`default/${i}.jpg`).getDownloadURL().then((url) => {
           let index = 0;
           let end = url.indexOf(".jpg?alt=media&");
@@ -33,7 +33,7 @@ export default class Quiz extends Component {
 
       this.setState({
         results: data,
-      });
+      }, () => {});
     }).catch(err => {
       //handle error
     });

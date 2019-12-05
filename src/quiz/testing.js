@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import Wrapper from "./wrapper";
-import { Button } from 'reactstrap';
 
 export default class Testing extends Component {
   constructor(props){
@@ -15,104 +14,130 @@ export default class Testing extends Component {
       answerStatus: 0, //0-este neodpovedal, 1-odpvoedal spravne, -1-odpovedal nespravne
 
       counter: 0,
+      correctAns: 0,
+      answeredAns: 0,
+      end: false,
+
+      lastId: null,
     }
-    this.setReactionAnswer.bind(this);
     this.createQuestion.bind(this);
     this.checkAnswer.bind(this);
+    this.endQuiz.bind(this);
   }
 
   UNSAFE_componentWillReceiveProps(props){
     this.setState({
       results: props.results,
       images: props.images,
-    }, () => this.createQuestion())
+      answerStatus: 0, //0-este neodpovedal, 1-odpvoedal spravne, -1-odpovedal nespravne
+      counter: 0,
+      correctAns: 0,
+      answeredAns: 0,
+      end: false,
+    }, () => this.createQuestion(false))
   }
 
-  createQuestion(){
-    let id = Math.floor(Math.random() * 2);
+  createQuestion(newQuiz){
+    let id = Math.floor(Math.random() * 10);
+    while (id === this.state.lastId){
+      id = Math.floor(Math.random() * 10);
+    }
 
     let res = this.state.results[id].result.split("-");
-    let imgs = [...this.state.images]; //kym mame len dve reakcie, nahraju sa vsetkz obrazky
+    let fakeRes = [];
+    for (var i = 0; i < res.length; i++) {
+      let n = (Math.floor(Math.random() * 60) + 1).toString();
+      while (res.includes(n) || fakeRes.includes(n)){
+        n = (Math.floor(Math.random() * 60) + 1).toString();
+      }
+      fakeRes.push(n.toString());
+    }
+    let imgs = [...this.state.images.filter(img => (res.includes(img.id) || fakeRes.includes(img.id)))];
+
+    let ans = Array(res.length).fill(0);
+    let filled = Math.floor(Math.random() * res.length)-2;
+    for (var j = 0; j < filled; j++) {
+      let img = Math.floor(Math.random() * res.length);
+      ans[img] = parseInt(res[img]);
+    }
 
     this.setState({
       reaction: this.state.results[id],
       reactionImages: imgs,
-      reactionAnswer: Array(res.length).fill(0),
-      counter: this.state.counter + 1,
+      reactionAnswer: ans,
+      counter: (newQuiz ? 1 : this.state.counter + 1),
+      correctAns: (newQuiz ? 0 : this.state.correctAns),
+      answeredAns: (newQuiz ? 0 : this.state.answeredAns),
+      end: false,
+      answerStatus: 0,
+      lastId: id,
     })
-  }
-
-  setReactionAnswer(index, imgId){
-    let newAnswer = [...this.state.reactionAnswer];
-    newAnswer.splice(index, 1, imgId);
-    this.setState({
-      reactionAnswer: newAnswer,
-    }, () => this.checkAnswer())
   }
 
   checkAnswer(){
     let ans = this.state.reactionAnswer.join("-");
-    if (ans.length != this.state.reaction.result.length ||
-        this.state.reactionAnswer[0] === 0 ||
-        this.state.reactionAnswer[0].indexOf("-0") > -1){
-          console.log("returned");
-      return;
-    }
     if (ans === this.state.reaction.result){
       this.setState({
         answerStatus: 1,
+        answeredAns: this.state.answeredAns + 1,
+        correctAns: this.state.correctAns + 1,
       })
     } else {
       this.setState({
         answerStatus: -1,
+        answeredAns: this.state.answeredAns + 1,
       })
     }
   }
 
+  endQuiz(){
+    this.setState({
+      end: true,
+    })
+    return [this.state.counter, this.state.answeredAns, this.state.correctAns];
+  }
 
   render(){
-    console.log("ANSWER " + this.state.answerStatus);
     return(
       <React.Fragment>
         {this.state.reaction &&
+          !this.state.end &&
           <h1>
-            Fill in the missing parts of the {this.state.reaction.name}
+            {`Question no. ${this.state.counter}`}
           </h1>
         }
-        {this.state.reaction &&
-          this.state.reactionImages &&
-         this.state.reactionImages.length > 0 &&
-          <Wrapper
-            reaction={this.state.reaction}
-            reactionImages={this.state.reactionImages}
-            setReactionAnswer={(index, imgId) => {
-                  let newAnswer = [...this.state.reactionAnswer];
-                  newAnswer.splice(index, 1, imgId);
-                  this.setState({
-                    reactionAnswer: newAnswer,
-                  }, () => this.checkAnswer())
-                }
-              }
-            answerStatus={this.state.answerStatus}
-            />
-        }
-        <div>
-        </div>
 
-        <Button
-          color="warning"
-          onClick={() => this.createQuestion()}
-          >
-          New Question
-        </Button>
+        {this.state.reaction &&
+          !this.state.end &&
+          <h1>
+          {`Fill in the missing parts of the ${this.state.reaction.name}`}
+          </h1>
+        }
+          <div className="wrapper">
+            {this.state.reaction &&
+              this.state.reactionImages &&
+             this.state.reactionImages.length > 0 &&
+              <Wrapper
+                reaction={this.state.reaction}
+                reactionImages={this.state.reactionImages}
+                filled={this.state.reactionAnswer}
+                setReactionAnswer={(index, imgId) => {
+                      let newAnswer = [...this.state.reactionAnswer];
+                      newAnswer.splice(index, 1, imgId);
+                      this.setState({
+                        reactionAnswer: newAnswer,
+                      })
+                    }
+                  }
+                answerStatus={this.state.answerStatus}
+                createQuestion={(e) => this.createQuestion(e)}
+                endQuiz={() => this.endQuiz()}
+                checkAnswer={() => this.checkAnswer()}
+                />
+            }
+          </div>
+
       </React.Fragment>
     )
   }
 }
-/*
-{false && <div>
-  <img style={{width: '100%', height: '200px', marginTop: '10px' , objectFit: 'cover', overflow: 'hidden'}}
-    src={url}
-    key={index}
-    alt={url} />
-</div> }*/

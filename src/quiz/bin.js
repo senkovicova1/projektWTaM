@@ -30,7 +30,7 @@ export const Dustbin = ({
   structure,
 }) => {
 
-  const diff = (structure.substr(0, id*2-1).match(/d/g) || []).length - (structure.substr(0, id*2+1).match(/m-m/g) || []).length;
+/*  const diff = (structure.substr(0, id*2-1).match(/d/g) || []).length - (structure.substr(0, id*2+1).match(/m-m/g) || []).length;
 
   const typeStyle = {
     "m": {
@@ -44,20 +44,63 @@ export const Dustbin = ({
       left: 150*(id-diff-1) + 20*(id-diff-1)  + "px",
       top: "140px"
     },
+  }*/
+
+  function findDiff() {
+    let s = structure.split("-");
+    let d = 0;
+    for (var i = 1; i <= id; i++) {
+      if (s[i] === "m"){
+        if (s[i-1] === "m"){
+          d -= 1;
+        } else if (s[i-1] === "u"){
+    //      d = d;
+        } else {
+          d += 1;
+        }
+      } else if (s[i] === "u"){
+        if (s[i-1] === "m"){
+      //    d = d;
+        } else {
+          d -= 1;
+        }
+      } else {
+        if (s[i-1] === "u"){
+    //      d = d;
+        } else {
+          d -= 1;
+        }
+      }
+    }
+    return d;
   }
-/*
-  console.log("---------------");
-  console.log(id);
-  console.log(diff);
-*/
+
+  const diff = findDiff();
+  const y = 0;
+
+   const typeStyle = {
+     "m": {
+       left:  150*(id-diff) + 20*(id-diff)  + "px",
+       top: 70 + y +"px",
+     },
+     "u": {
+       left: 150*(id-diff) + 20*(id-diff)  + "px",
+       top: y +"px",
+     },
+     "d": {
+       left: 150*(id-diff-1) + 20*(id-diff-1)  + "px",
+       top: 140 + y +"px"
+     },
+   }
+
   const isActive = isOver && canDrop
 
   let backgroundColor = '#FFF'
 
   if (isActive) {
-    backgroundColor = '#900C3F'
+    backgroundColor = '#ffa17e'
   } else if (canDrop) {
-    backgroundColor = '#8BF1E6'
+    backgroundColor = '#9bdef5'
   }
 
   let border = "1px solid #555"
@@ -74,11 +117,11 @@ export const Dustbin = ({
       : ""}
 
       {isActive
-        ? <p>Release to drop</p>
+        ? <p style={{color: "FF8D57"}}>Release to drop</p>
         : ""}
 
       {lastDroppedItem && (
-        <img src={lastDroppedItem.url} height="100px" width="150px" style={{display: "block",  marginLeft: "auto",  marginRight: "auto", borderRadius: "10px", border: "1px solid #555"}}/>
+        <img src={lastDroppedItem.url}alt="img" height="100px" width="150px" style={{display: "block",  marginLeft: "auto",  marginRight: "auto", borderRadius: "10px", border: "1px solid #555"}}/>
       )}
     </div>,
   )

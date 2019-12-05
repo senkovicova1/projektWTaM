@@ -1,9 +1,6 @@
 import React, {Component} from 'react';
-import { Button, Navbar, Nav, NavLink } from 'reactstrap';
+import { Navbar, Nav, NavLink } from 'reactstrap';
 import logo from './scss/logo.png';
-import head from './scss/headerimg.png';
-
-const Header = ({title}) => (<header></header>);
 
 export default class Head extends Component {
   constructor(props){

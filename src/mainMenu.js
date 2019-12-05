@@ -1,12 +1,5 @@
 import React, {Component} from 'react';
-import { Alert, Button, Navbar, Nav, NavLink } from 'reactstrap';
-import logo from './scss/logo.png';
 import trylogo from './scss/try.png';
-import head from './scss/headerimg.png';
-
-
-import Header from './header';
-const Footer = ({title}) => (<footer>{title}</footer>);
 
 export default class Navigation extends Component {
   constructor(props){
