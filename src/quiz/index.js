@@ -5,7 +5,7 @@ import firebase from 'firebase';
 import { DndProvider } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 
-export default class Navigation extends Component {
+export default class Quiz extends Component {
   constructor(props){
     super(props);
     this.state = {
@@ -21,7 +21,7 @@ export default class Navigation extends Component {
     }).then(data => {
       let storage = firebase.storage().ref();
       //"https://firebasestorage.googleapis.com/v0/b/awesometeamone-8ab5b.appspot.com/o/default%2F7.jpg?alt=media&token=b8f0423a-f33c-476f-9caa-b3e30b8ab094"
-      for (var i = 1; i <= 12; i++) {
+      for (var i = 1; i <= 67; i++) {
         storage.child(`default/${i}.jpg`).getDownloadURL().then((url) => {
           let index = 0;
           let end = url.indexOf(".jpg?alt=media&");
@@ -33,7 +33,7 @@ export default class Navigation extends Component {
 
       this.setState({
         results: data,
-      });
+      }, () => {});
     }).catch(err => {
       //handle error
     });
@@ -41,11 +41,11 @@ export default class Navigation extends Component {
 
   render(){
     return(
-      <div style={{padding: "20px"}}>
+      <section className="quiz">
           <DndProvider backend={HTML5Backend}>
             <Testing results={this.state.results} images={this.state.images}/>
           </DndProvider>
-      </div>
+      </section>
     )
   }
 }

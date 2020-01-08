@@ -1,1 +1,234 @@
+body{
+	margin: 0;
+	padding: 0;
+}
 
+#root{
+	height: 100vh;
+	margin: 0;
+	display: grid;
+
+
+  	grid-template-columns: 20vw auto auto auto auto auto auto auto auto 10vw;
+    grid-template-rows: 100px auto auto 120px;
+
+    grid-template-areas:
+
+    "grid-H    grid-B     grid-N      grid-N   grid-N   grid-B2     grid-B2     grid-B2          grid-L         grid-L "
+    "  grid-S       grid-S        grid-S     grid-S    grid-S    grid-S   grid-S              grid-S             grid-S               grid-S "
+		"  grid-A       grid-A         grid-A     grid-A    grid-A    grid-A   grid-A              grid-A             grid-A               grid-A "
+    "grid-F    grid-F     grid-F       grid-F   grid-F   grid-F    grid-F       grid-F         grid-F          grid-F"
+	;
+
+	font-family: sans-serif;
+    line-height: 1.2em;
+}
+footer{
+  grid-area: grid-F;
+  background-color: #40798C;
+  display: flex;
+	flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+footer p{
+  margin:3px;
+	color: white;
+}
+
+header{
+	grid-area: grid-H;
+	display: flex;
+	justify-content: space-around;
+  align-items: center;
+	background-color: #40798C;
+}
+
+.headerImage img{
+  height: 80px;
+}
+
+.headerImage:hover {
+    cursor: pointer;
+}
+
+.login{
+	grid-area: grid-L;
+	background-color: none;
+	display: flex;
+	justify-content:space-around;
+  align-items: center;
+	background-color: #40798C;
+}
+
+#butt{
+	text-decoration: none;
+	color: #9EC1A3;
+	font-size: 18pt;
+}
+#butt:hover{
+	color: white;
+}
+
+nav{
+	grid-area: grid-N;
+	display: flex;
+	background-color: #40798C;
+
+}
+nav ul{
+	width: 100%;
+	display: flex;
+	justify-content: space-around;
+}
+
+.nav-link{
+	text-decoration: none;
+	color: white;
+	font-size: 18pt;
+	border-radius: 22px;
+	transition: background-color 0.4s;
+}
+.nav-link:hover {
+	color: white;
+	border-radius: 22px;
+	background-color: #59a8c2;
+}
+
+nav ul a.active{
+	color: white;
+	border-radius: 22px;
+	background-color: #59a8c2;
+}
+
+
+.blue{
+	grid-area: grid-B;
+	background-color: #40798C;
+}
+.blue2{
+	grid-area: grid-B2;
+	background-color: #40798C;
+}
+
+section{
+	grid-area: grid-S;
+	display: flex;
+	flex-direction: column;
+	height: auto;/*calc(50vh - 100px);*/
+
+	/*justify-content: center;*/
+	padding-top: 80px;
+	padding-bottom: 50px;
+	/*width: 60vw;*/
+	/*justify-content: center;*/
+	align-items: center;
+}
+
+.sec{
+	margin-left: 10%;
+	margin-right: 10%;
+}
+
+section div{
+	display: flex;
+	flex-direction: column;
+}
+
+section div h2{
+	color: #FF6B35;
+	align-self: center;
+  padding-bottom: 30px;
+
+}
+
+aside{
+	grid-area: grid-A;
+	height: auto;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+  padding-bottom: 80px;
+}
+aside img{
+	height: 300px;
+}
+
+aside img.try {
+	transition: opacity .5s ease;
+}
+
+aside img.try:hover {
+    cursor: pointer;
+}
+
+section h1{
+	color: #FF6B35;
+	align-self: center;
+  padding-bottom: 20px;
+}
+
+.boxes{
+	width: 70vw;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-around;
+	align-self: center;
+}
+
+
+
+.dustbin div div p{
+	color: rgba(255, 0, 0, 0.7);
+	font-weight: bold;
+	margin-top: 27%;
+}
+
+.dustbin{
+	overflow-x: scroll;
+	margin-bottom: 30px;
+}
+
+.wrapper{
+	width: 70%;
+	align-items: center;
+	display: inline;
+}
+
+section button{
+	align-self: flex-end;
+	 margin-right: 5%;
+	 margin-top: 3%;
+}
+.main{
+ width:	100%;
+}
+.rel{
+	margin-left: 0.5%;
+	margin-right: 0.5%;
+}
+.quiz{
+	padding-top: 40px;
+}
+
+.row{
+  display: flex !important;
+  margin: 0px;
+	width: 100%;
+}
+
+.button-row{
+	flex-direction: row;
+	padding-top: 0px;
+	margin-bottom: 30px;
+}
+
+.btn{
+		margin: 0px;
+}
+
+.progress{
+	flex-direction: row;
+}

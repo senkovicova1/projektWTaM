@@ -7,8 +7,9 @@ import config from './firebase';
 import Firebase from 'firebase';
 import base from 're-base';
 
-import './scss/style.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './scss/style.css';
+
 
 const app = Firebase.initializeApp(config);
 let db = Firebase.firestore(app);
@@ -19,13 +20,13 @@ export let firebase = db;
 
 const Root = () => {
   return(
-    <div>
+    <React.Fragment>
       <BrowserRouter>
-        <div>
+        <React.Fragment>
           <Route path='/' component={Navigation} />
-        </div>
+        </React.Fragment>
       </BrowserRouter>
-    </div>
+    </React.Fragment>
   )
 }
 
