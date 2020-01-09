@@ -47,6 +47,10 @@ header{
   height: 80px;
 }
 
+.flex{
+	flex:1;
+}
+
 .login{
 	grid-area: grid-L;
 	background-color: none;
@@ -123,8 +127,7 @@ section div{
 section div h2{
 	color: #FF6B35;
 	align-self: center;
-   padding-bottom: 30px;
-
+  padding-bottom: 30px;
 }
 
 aside{
@@ -144,6 +147,10 @@ section h1{
 	align-self: center;
   padding-bottom: 20px;
 }
+section h2{
+	color: #c3613d;
+	align-self: center;
+}
 
 .boxes{
 	width: 70vw;
@@ -154,8 +161,6 @@ section h1{
 	justify-content: space-around;
 	align-self: center;
 }
-
-
 
 .dustbin div div p{
 	color: darkgray;
@@ -191,8 +196,18 @@ section button{
 
 .row{
   display: flex !important;
+	flex-direction: row;
   margin: 0px;
 	width: 100%;
+}
+
+.row>label{
+	margin-top: auto;
+	margin-bottom: auto;
+	color: #71412f;
+}
+.row>div>.form-control{
+	display: flex;
 }
 
 .button-row{
@@ -207,4 +222,22 @@ section button{
 
 .progress{
 	flex-direction: row;
+}
+
+.reaction-form{
+	margin-top: 20px;
+	width: 50%;
+}
+
+.m-r-10{
+	margin-right: 10px;
+}
+.m-t-10{
+	margin-top: 10px;
+}
+.m-t-20{
+	margin-top: 20px;
+}
+.m-b-10{
+	margin-bottom: 20px;
 }

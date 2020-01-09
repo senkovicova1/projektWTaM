@@ -9,6 +9,7 @@ import base from 're-base';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './scss/style.css';
+//import './scss/generatedCSS.css';
 
 
 const app = Firebase.initializeApp(config);
