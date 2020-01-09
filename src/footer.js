@@ -11,7 +11,8 @@ export default class Footer extends Component {
     return(
       <React.Fragment>
       <footer>
-      <p>©Team#One</p>
+      <p>©Copyright 2019-2020</p>
+      <p>All rights reserved. Powered by Team#One</p>
       </footer>
       </React.Fragment>
     );

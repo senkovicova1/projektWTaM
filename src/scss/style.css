@@ -10,7 +10,7 @@ body{
 
 
   	grid-template-columns: 20vw auto auto auto auto auto auto auto auto 10vw;
-    grid-template-rows: 100px auto auto 100px;
+    grid-template-rows: 100px auto auto 120px;
 
     grid-template-areas:
 
@@ -27,12 +27,13 @@ footer{
   grid-area: grid-F;
   background-color: #40798C;
   display: flex;
-  justify-content: space-around;
+	flex-direction: column;
+  justify-content: center;
   align-items: center;
 }
 footer p{
-  margin:0;
-	color: #00c5ffff;
+  margin:3px;
+	color: white;
 }
 
 header{
@@ -47,6 +48,10 @@ header{
   height: 80px;
 }
 
+.headerImage:hover {
+    cursor: pointer;
+}
+
 .login{
 	grid-area: grid-L;
 	background-color: none;
@@ -54,7 +59,6 @@ header{
 	justify-content:space-around;
   align-items: center;
 	background-color: #40798C;
-
 }
 
 #butt{
@@ -63,7 +67,7 @@ header{
 	font-size: 18pt;
 }
 #butt:hover{
-	color: blue;
+	color: white;
 }
 
 nav{
@@ -78,14 +82,25 @@ nav ul{
 	justify-content: space-around;
 }
 
-nav ul a{
+.nav-link{
 	text-decoration: none;
-	color: #00c5ffff;
+	color: white;
 	font-size: 18pt;
+	border-radius: 22px;
+	transition: background-color 0.4s;
 }
-nav ul a:hover{
-	color: blue;
+.nav-link:hover {
+	color: white;
+	border-radius: 22px;
+	background-color: #59a8c2;
 }
+
+nav ul a.active{
+	color: white;
+	border-radius: 22px;
+	background-color: #59a8c2;
+}
+
 
 .blue{
 	grid-area: grid-B;
@@ -123,7 +138,7 @@ section div{
 section div h2{
 	color: #FF6B35;
 	align-self: center;
-   padding-bottom: 30px;
+  padding-bottom: 30px;
 
 }
 
@@ -137,6 +152,14 @@ aside{
 }
 aside img{
 	height: 300px;
+}
+
+aside img.try {
+	transition: opacity .5s ease;
+}
+
+aside img.try:hover {
+    cursor: pointer;
 }
 
 section h1{
@@ -158,8 +181,9 @@ section h1{
 
 
 .dustbin div div p{
-	color: darkgray;
-	margin-top: 25%;
+	color: rgba(255, 0, 0, 0.7);
+	font-weight: bold;
+	margin-top: 27%;
 }
 
 .dustbin{
