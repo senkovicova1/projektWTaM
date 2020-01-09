@@ -8,7 +8,6 @@ firestore.rules
 storage.rules
 
 src/firebase.js
-package.json
 package-lock.json
 
 # dependencies
