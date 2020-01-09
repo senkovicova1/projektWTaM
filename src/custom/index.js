@@ -3,6 +3,8 @@ import {rebase} from "../index";
 import { Input, Button } from "reactstrap";
 import firebase from 'firebase';
 
+import FileUploader from "react-firebase-file-uploader";
+
 import arrow from '../scss/arrow.jpg';
 
 const style = {
@@ -32,6 +34,7 @@ export default class Quiz extends Component {
       category: "",
       reaction: [null, null, null, null], //[{url, type: u/d/m}]
     }
+    this.removeImg.bind(this);
   }
 
   componentDidMount(){
@@ -44,6 +47,33 @@ export default class Quiz extends Component {
   key={url}
   alt={"url"} />
 */
+
+handleUploadStart = () => this.setState({ isUploading: true, progress: 0 });
+
+handleProgress = progress => this.setState({ progress });
+
+handleUploadError = error => {
+  this.setState({ isUploading: false });
+  console.error(error);
+};
+
+handleUploadSuccess = filename => {
+/*  this.setState({ name: filename, progress: 100, isUploading: false });
+  firebase
+    .storage()
+    .ref("lanwiki-note-pictures")
+    .child(filename)
+    .getDownloadURL()
+    .then(url => {
+      this.setState({ images: [...this.state.images, url], names: [...this.state.names, url] });
+      this.setState({saving:true});
+      rebase.addToCollection('/lanwiki-image-names', {name: filename});
+    })*/
+};
+
+removeImg(index){
+
+}
 
   render(){
     let arrows = /*this.state.reaction ? this.state.reaction.structure.match(/-/g).length : */["-"];
@@ -81,6 +111,10 @@ export default class Quiz extends Component {
             <label className="m-r-10">Now let's create your reaction!</label>
           </div>
 
+
+          {this.state.isUploading && <p>Progress: {this.state.progress}</p>}
+
+
           <div className="dustbin m-t-20">
             <div className="rel" style={{position: "relative", paddingBottom:"300px"}}>
             {
@@ -98,7 +132,7 @@ export default class Quiz extends Component {
                 const typeStyle = {
                   "m": {
                     left:  150*(index - diff) + 20*(index - diff)  + "px",
-                    top: 70 + y +"px",
+                    top: 100 + y +"px",
                   },
                   "u": {
                     left: 150*(index - diff) + 20*(index - diff)  + "px",
@@ -106,13 +140,24 @@ export default class Quiz extends Component {
                   },
                   "d": {
                     left: 150*(index - diff-1) + 20*(index - diff-1)  + "px",
-                    top: 140 + y +"px"
+                    top: 170 + y +"px"
                   },
                 }
                 let type = ((index-1) % 3 === 0 ? "u" : ((index-2) % 3 === 0 ? "d" : "m"))
                 return (
-                  <div style={{ ...style, backgroundColor: "#FFF", border: "1px solid #555", ...typeStyle[type] }}>
+                  <div style={{ ...style, backgroundColor: "#FFF", border: "1px solid #555", ...typeStyle[type],  }}>
                     {index}
+                    <Button className="remove-img" onClick={() => this.removeImg(index)}>X</Button>
+                        <FileUploader
+                          accept="image/*"
+                          name="avatar"
+                          filename={file => file.name.split('.')[0]}
+                          storageRef={firebase.storage().ref("lanwiki-note-pictures")}
+                          onUploadStart={this.handleUploadStart}
+                          onUploadError={this.handleUploadError}
+                          onUploadSuccess={this.handleUploadSuccess}
+                          onProgress={this.handleProgress}
+                        />
                   </div>
                 )
               })
@@ -122,7 +167,7 @@ export default class Quiz extends Component {
                 {
                   let l = 170 + 150*(index*2) + 20*index*2;
                   return (
-                    <div key={index} style={{ position: "absolute", left: l, top: '100px'}}>
+                    <div key={index} style={{ position: "absolute", left: l, top: '130px'}}>
                       <img src={arrow} alt="img" height="40px" width="150px" style={{display: "block",  marginLeft: "auto",  marginRight: "auto", borderRadius: "10px", border: "0px solid #555"}}/>
                     </div>
                   )
