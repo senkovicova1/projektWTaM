@@ -19,6 +19,8 @@ export default class Testing extends Component {
       end: false,
 
       lastId: null,
+      selectedOption: this.props.selectedOption,
+      value: this.props.value,
     }
     this.createQuestion.bind(this);
     this.checkAnswer.bind(this);
@@ -34,6 +36,8 @@ export default class Testing extends Component {
       correctAns: 0,
       answeredAns: 0,
       end: false,
+      selectedOption: props.selectedOption,
+      value: props.value,
     }, () => this.createQuestion(false))
   }
 
@@ -117,7 +121,8 @@ export default class Testing extends Component {
             {this.state.reaction &&
               this.state.reactionImages &&
              this.state.reactionImages.length > 0 &&
-              <Wrapper
+              <Wrapper counter = {this.state.counter}
+                selectedOption = {this.state.selectedOption}
                 reaction={this.state.reaction}
                 reactionImages={this.state.reactionImages}
                 filled={this.state.reactionAnswer}

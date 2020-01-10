@@ -27,7 +27,7 @@ export default class Head extends Component {
       <Navbar>
         <Nav>
           <NavLink href="/quiz">Quiz</NavLink>
-          <NavLink href="/custom">Custom questions</NavLink>
+          <NavLink href="#pricing">Custom questions</NavLink>
         </Nav>
       </Navbar>
       <div className="blue2"></div>
