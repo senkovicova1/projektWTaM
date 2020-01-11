@@ -22,10 +22,9 @@ export default class Head extends Component {
                     } else this.props.history.push('/');
 
         }}><img src={logo} alt="head"/></div>
-
+        <Navigation></Navigation>
       </header>
       <div className="blue"></div>
-      <Navigation></Navigation>
       </React.Fragment>
     );
   }

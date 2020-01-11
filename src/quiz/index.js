@@ -32,16 +32,16 @@ export default class Quiz extends Component {
     }).then(data => {
       let storage = firebase.storage().ref();
       let j = 0;
-      if (this.state.value === "compounds"){
-        j = 25;
-      }
-      else if (this.state.value === "balancing"){
-        j = 20;
-      }
-      else{
-        j = 81;
-      }
-      console.log(this.state.value);
+      rebase.get("counts", {
+        context: this,
+      }).then(data => {
+        console.log(data[0][this.state.value]);
+         j = data[this.state.value];
+      }).catch(err => {
+      });
+
+      console.log(j);
+
       //"https://firebasestorage.googleapis.com/v0/b/awesometeamone-8ab5b.appspot.com/o/default%2F7.jpg?alt=media&token=b8f0423a-f33c-476f-9caa-b3e30b8ab094"
       //gs://awesometeamone-8ab5b.appspot.com/organicChemistrySynthesis/1.jpg
       for (var i = 1; i <= j; i++) {
@@ -51,7 +51,9 @@ export default class Quiz extends Component {
           let start = url.indexOf(`${this.state.value === "results" ? "organicChemistrySynthesis" : this.state.value }%2F`)+(this.state.value === "results" ? 28 : 12  );;
           index = url.slice(start, end);
           this.setState({images: this.state.images.concat([{url: url, id: index}])});
-        })
+        }).catch(err => {
+          console.log(err);
+        });
       };
 
       this.setState({
