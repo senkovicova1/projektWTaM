@@ -5,7 +5,9 @@ import {Button} from "reactstrap";
 export default class QuizForm extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {value: "results", selectedOption: 5};
+    this.state = {
+      value: "results",
+      selectedOption: 5};
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleOptionChange = this.handleOptionChange.bind(this);
@@ -18,16 +20,13 @@ export default class QuizForm extends React.Component {
   handleSubmit(event) {
     //alert('Your favorite flavor is: ' + this.state.value + '         you chose: ' + this.state.selectedOption);
     //event.preventDefault();
-    console.log(this.state);
     this.props.startQuiz(this.state);
   }
   handleOptionChange(event) {
-    console.log(event.target.value);
     this.setState({selectedOption: event.target.value});
   }
 
   render() {
-    console.log(this.state.selectedOption);
     return (
       <form>
         <div className="form-check">

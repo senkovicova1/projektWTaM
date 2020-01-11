@@ -179,9 +179,6 @@ export default class Wrapper extends Component {
           color="warning ml-auto"
           onClick={() =>
             {
-              console.log(this.props.counter);
-              console.log(this.props.selectedOption);
-
               if (this.props.counter === this.props.selectedOption){
                 let qData = this.props.endQuiz();
                 this.setState({
