@@ -109,14 +109,16 @@ export default class Wrapper extends Component {
         </div>
       );
     }
-
-    let arrows = this.state.reaction ? this.state.reaction.structure.match(/-/g).length : 0;
-    if (this.state.reaction) {
-      let u = this.state.reaction.structure.match(/m-u/g);
-      let d = this.state.reaction.structure.match(/d-m/g);
-      arrows -= ( (u !== null ? u.length : 0) + (d !== null ? d.length : 0));
+    let arrows = [];
+    if (this.state.reaction && this.state.reaction.structure.length > 1){
+      arrows = this.state.reaction ? this.state.reaction.structure.match(/-/g).length : 0;
+      if (this.state.reaction) {
+        let u = this.state.reaction.structure.match(/m-u/g);
+        let d = this.state.reaction.structure.match(/d-m/g);
+        arrows -= ( (u !== null ? u.length : 0) + (d !== null ? d.length : 0));
+      }
+      arrows = Array(arrows).fill(0);
     }
-    arrows = Array(arrows).fill(0);
     return(
       <div className="main">
       <div className="dustbin">
