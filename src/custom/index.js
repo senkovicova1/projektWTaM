@@ -1,11 +1,55 @@
 import React, {Component} from 'react';
 import {rebase} from "../index";
-import { Input, Button } from "reactstrap";
+import { Input, Button, Alert  } from "reactstrap";
 import firebase from 'firebase';
+import Select from 'react-select';
 
 import FileUploader from "react-firebase-file-uploader";
 
 import arrow from '../scss/arrow.jpg';
+
+const selectStyle = {
+	control: base => ({
+		...base,
+		minHeight: 30,
+		backgroundColor: 'white',
+		borderRadius: 0
+	}),
+	dropdownIndicator: base => ({
+		...base,
+		padding: 4,
+	}),
+	clearIndicator: base => ({
+		...base,
+		padding: 4,
+	}),
+	multiValue: base => ({
+		...base,
+		backgroundColor: 'white',
+		borderRadius: 0
+	}),
+	valueContainer: base => ({
+		...base,
+		padding: '0px 6px',
+		borderRadius: 0
+	}),
+	input: base => ({
+		...base,
+		margin: 0,
+		padding: 0,
+		backgroundColor: 'inherit',
+		borderRadius: 0
+	}),
+	indicatorSeparator: base => ({
+		...base,
+		width: 0,
+	}),
+
+};
+
+const STORAGES = [{label: "Syntheses from organic chemistry", value: "organicChemistrySynthesis"},
+                  {label: "Balancing chemical reactions", value: "balancing"},
+                  {label: "Chemical compounds", value: "compounds"},]
 
 const style = {
   position: "absolute",
@@ -31,66 +75,131 @@ export default class Quiz extends Component {
     super(props);
     this.state = {
       name: "",
-      category: "",
-      reaction: [null, null, null, null], //[{url, type: u/d/m}]
+      category: null,
+      reaction: [null, null, null, null], //[{url, type: u/d/m}],
+
+      isUploading: false,
+      counts: null,
+
+      saved: false,
     }
+    this.submit.bind(this);
+
     this.removeImg.bind(this);
+    this.changedCategory.bind(this);
+    this.handleUploadStart.bind(this);
+    this.handleProgress.bind(this);
+    this.handleUploadError.bind(this);
+    this.handleUploadSuccess.bind(this);
   }
 
   componentDidMount(){
+    rebase.get("counts", {
+      context: this,
+    }).then(data => {
+      this.setState({
+        counts: {...data[0], temp: 0},
+      });
+    }).catch(err => {
+    });
+  }
+
+  submit(){
+    let body = {
+      name: this.state.name,
+      result: this.state.reaction.map((r, index) => (r !== null ? (parseInt(this.state.counts[this.state.category.value]) + 1 + index).toString() : null)).filter(x => x).join("-"),
+      structure: this.state.reaction.map((r, index) => (r !== null ? ((index-1) % 3 === 0 ? "u" : ((index-2) % 3 === 0 ? "d" : "m" )) : null)).filter(x => x).join("-"),
+    }
+    let newCounts = {...this.state.counts};
+    newCounts[this.state.category.value] = this.state.counts[this.state.category.value] + this.state.reaction.length;
+
+    rebase.addToCollection((this.state.category.value !== "organicChemistrySynthesis" ? this.state.category.value : "results"), body)
+    .then(() => {
+      rebase.updateDoc('counts/MszjsdeErfZclNryTGgA', newCounts)
+        .then(() => {
+          this.setState({
+            saved: true,
+            name: "",
+            category: null,
+            reaction: [null, null, null, null],
+
+            isUploading: false,
+            counts: newCounts,
+          })
+        }).catch(err => {
+        //handle error
+      });
+    }).catch(err => {
+    //handle error
+  });
 
   }
-/*
-<img
-  style={{width: "150px", height: "100px", objectFit: "fill", marginLeft: "1%", marginRight: "1%", marginBottom: "1%", boxShadow: "7px 7px 7px #555", borderRadius: "10px", border: "1px solid #555"}}
-  src={url}
-  key={url}
-  alt={"url"} />
-*/
 
-handleUploadStart = () => this.setState({ isUploading: true, progress: 0 });
+  handleUploadStart(index){
+    this.setState({ isUploading: true });
+  }
+  handleProgress(index){
+  }
+  handleUploadError(index, error){
+    this.setState({ isUploading: false });
+    console.error(error);
+  }
+  handleUploadSuccess(index, filename){
+    this.setState({ isUploading: false });
+    firebase
+      .storage()
+      .ref(this.state.category.value)
+      .child(filename)
+      .getDownloadURL()
+      .then(url => {
+        let newReaction = [...this.state.reaction];
+        newReaction[index] = url;
+        this.setState({
+          reaction: newReaction,
+        })
+      })
+  }
 
-handleProgress = progress => this.setState({ progress });
+  removeImg(index){
+    let newReaction = [...this.state.reaction];
+    newReaction[index] = null;
+    this.setState({
+      reaction: newReaction,
+    })
+  }
 
-handleUploadError = error => {
-  this.setState({ isUploading: false });
-  console.error(error);
-};
+  changedCategory(c){
+    this.setState({
+      category: c,
+      reaction: [null, null, null, null],
+    })
+  }
 
-handleUploadSuccess = filename => {
-/*  this.setState({ name: filename, progress: 100, isUploading: false });
-  firebase
-    .storage()
-    .ref("lanwiki-note-pictures")
-    .child(filename)
-    .getDownloadURL()
-    .then(url => {
-      this.setState({ images: [...this.state.images, url], names: [...this.state.names, url] });
-      this.setState({saving:true});
-      rebase.addToCollection('/lanwiki-image-names', {name: filename});
-    })*/
-};
-
-removeImg(index){
-
-}
+  enlargeReaction(){
+    let newReaction = [...this.state.reaction, null, null, null];
+    this.setState({
+      reaction: newReaction,
+    })
+  }
 
   render(){
-    let arrows = /*this.state.reaction ? this.state.reaction.structure.match(/-/g).length : */["-"];
-/*    if (this.state.reaction) {
-      let u = this.state.reaction.structure.match(/m-u/g);
-      let d = this.state.reaction.structure.match(/d-m/g);
-      arrows -= ( (u !== null ? u.length : 0) + (d !== null ? d.length : 0));
-    }*/
+    let arrows = Array.from({length: Math.floor((this.state.reaction.length - 1)/3)}, (v, i) => "-");
+
+    let len = this.state.reaction.length;
+    const positionLeft = 170 * ((len - 1) - (Math.floor((len-2)/3)));
 
     return(
-      <section>
+      <div className="custom">
         <h1>
           Missing a reaction?
         </h1>
         <h2>
           Add one to our database!
         </h2>
+
+        <Alert color="info" className="flex w-100 m-t-20" isOpen={this.state.saved} toggle={() => this.setState({saved: false})}>
+              Your reaction was successfully saved!
+        </Alert>
 
         <div className="reaction-form">
           <div className="row">
@@ -100,19 +209,38 @@ removeImg(index){
             </div>
           </div>
 
-          <div className="row m-t-10">
+          <div className="row m-t-10 select">
             <label className="m-r-10">Which category does this reaction belong to?</label>
-            <div className="flex">
-              <Input value={this.state.category} onChange={(e) => this.setState({category: e.target.value})} />
-            </div>
+            <Select
+              className="flex"
+              value={this.state.category}
+              onChange={(c) => this.changedCategory(c)}
+              options={STORAGES}
+              style={selectStyle}
+              />
           </div>
+          {this.state.category === null &&
+            <div className="row">
+              <label className="note">*Note: Changing category later will reset the reaction.</label>
+              <label className="error">You can't add compounds unless the category is chosen!</label>
+            </div>
+          }
+
+          {this.state.category !== null &&
+            <div className="row">
+              <label className="note">*Note: Changing category later will reset the reaction.</label>
+            </div>
+          }
 
           <div className="row m-t-10">
             <label className="m-r-10">Now let's create your reaction!</label>
           </div>
 
+          <div className="row">
+            <label className="note">*Note: You don't have to fill in parts above and below the arrow, if your reaction lack those.</label>
+            <label className="note">If you accidentally enlarge your reaction, you can simply leave the ends epmty.</label>
 
-          {this.state.isUploading && <p>Progress: {this.state.progress}</p>}
+          </div>
 
 
           <div className="dustbin m-t-20">
@@ -146,22 +274,32 @@ removeImg(index){
                 let type = ((index-1) % 3 === 0 ? "u" : ((index-2) % 3 === 0 ? "d" : "m"))
                 return (
                   <div style={{ ...style, backgroundColor: "#FFF", border: "1px solid #555", ...typeStyle[type],  }}>
-                    {index}
-                    <Button className="remove-img" onClick={() => this.removeImg(index)}>X</Button>
-                        <FileUploader
-                          accept="image/*"
-                          name="avatar"
-                          filename={file => file.name.split('.')[0]}
-                          storageRef={firebase.storage().ref("lanwiki-note-pictures")}
-                          onUploadStart={this.handleUploadStart}
-                          onUploadError={this.handleUploadError}
-                          onUploadSuccess={this.handleUploadSuccess}
-                          onProgress={this.handleProgress}
-                        />
+                    {r !== null &&
+                      <img
+                        style={{width: "150px", height: "100px", objectFit: "fill", borderRadius: "10px", border: "1px solid #555"}}
+                        src={r}
+                        key={r}
+                        alt={"url"} />}
+                    {r !== null &&
+                      <Button className="remove-img" onClick={() => this.removeImg(index)}>X</Button>}
+                    {r === null &&
+                     this.state.category !== null &&
+                      <FileUploader
+                        accept="image/*"
+                        name="avatar"
+                        filename={file => (parseInt(this.state.counts[this.state.category.value]) + 1 + index)}
+                        storageRef={firebase.storage().ref(this.state.category.value)}
+                        onUploadStart={() => this.handleUploadStart(index)}
+                        onUploadError={(error) => this.handleUploadError(index, error)}
+                        onUploadSuccess={(filename) => this.handleUploadSuccess(index, filename)}
+                        onProgress={() => this.handleProgress(index)}
+                      />}
                   </div>
                 )
               })
             }
+            <Button className="enlarge-reaction" style={{ position: "absolute", top: '100px', left: `${positionLeft}px`}} onClick={() => this.enlargeReaction()}>+</Button>
+
             {
               arrows.map((a, index) =>
                 {
@@ -179,12 +317,13 @@ removeImg(index){
 
           <Button
             color="success"
-            disabled={!this.state.name || !this.state.category}>
+            disabled={!this.state.name || !this.state.category || this.state.reaction.some((r, index) => index % 3 === 0 && r === null)}
+            onClick={() => this.submit()}>
             Save!
           </Button>
         </div>
 
-      </section>
+      </div>
     )
   }
 }
