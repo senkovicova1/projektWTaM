@@ -41,7 +41,7 @@ const Navigation = (props) => {
               <NavLink style={{color: "white"}} href="/quiz" className={(location.pathname.includes("/quiz") ? "active" : "")}>Quiz</NavLink>
             </NavItem>
             <NavItem>
-              <NavLink style={{color: "white"}} href="/customquiz" className={(location.pathname.includes("/custom") ? "active" : "")}>Custom quiz</NavLink>
+              <NavLink style={{color: "white"}} href="/add-reaction" className={(location.pathname.includes("/add-reaction") ? "active" : "")}>Add a reaction</NavLink>
             </NavItem>
             <NavItem>
               <NavLink style={{color: "white"}} href="/profile" className={(location.pathname.includes("/profile") ? "active" : "")}>Profile</NavLink>

@@ -166,12 +166,15 @@ aside img.try:hover {
     cursor: pointer;
 }
 
-section h1{
+h1{
 	color: #FF6B35;
 	align-self: center;
   padding-bottom: 20px;
 }
-
+h2{
+	color: #c3613d;
+	align-self: center;
+}
 .boxes{
 	width: 70vw;
 	display: flex;
@@ -219,8 +222,19 @@ section button{
 
 .row{
   display: flex !important;
+	flex-direction: row;
   margin: 0px;
 	width: 100%;
+}
+
+.row>label{
+	margin-top: auto;
+	margin-bottom: auto;
+	color: #71412f;
+}
+.row>div>.form-control{
+	display: flex;
+	flex-direction: row !important;
 }
 
 .button-row{
@@ -235,4 +249,91 @@ section button{
 
 .progress{
 	flex-direction: row;
+}
+
+.reaction-form{
+	margin-top: 20px;
+	width: 100%;
+}
+
+input[type="file"]{
+	color: transparent;
+	margin-top: 100px;
+	margin-left: 20px;
+}
+
+.remove-img{
+	position: absolute;
+	background-color: transparent;
+	color: #FF6B35;
+	font-weight: bold;
+	border: 0px;
+	border-radius: 10px;
+	padding: 0px;
+	width: 30px;
+	height: 30px;
+	top: 0;
+	right: 0;
+}
+
+.remove-img:hover{
+	background-color: #FF6B35;
+	color: white;
+	right: 0;
+}
+
+.enlarge-reaction{
+	background-color: transparent;
+	color: #555;
+	font-size: 30px;
+	width: 150px;
+	height: 100px;
+	border-radius: 10px;
+	border: 1px solid #555;
+}
+
+.custom{
+	width: 50%;
+	margin-left: auto;
+	margin-right: auto;
+	grid-area: grid-S;
+	display: flex;
+	flex-direction: column;
+	height: auto;
+	padding-top: 80px;
+	padding-bottom: 50px;
+	align-items: center;
+}
+
+.error{
+	color: red !important;
+	font-size: 12px;
+	font-weight: bold;
+	margin-left: auto;
+}
+
+.note{
+	font-size: 12px;
+	font-weight: bold;
+}
+
+.flex{
+	flex:1;
+}
+
+.w-100{
+	width: 100%;
+}
+
+.m-r-10{
+	margin-right: 10px;
+}
+.m-t-10{
+	margin-top: 10px;
+}
+.m-t-20{
+	margin-top: 20px;
+}
+.m-b-10{
+	margin-bottom: 20px;
 }
