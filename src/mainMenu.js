@@ -1,13 +1,29 @@
 import React, {Component} from 'react';
 import trylogo from './scss/try.png';
+import setlogo from './scss/start.png';
 
 export default class Navigation extends Component {
   constructor(props){
     super(props);
     this.state = {
-      vec: [],
-    }
+       imgSrc: trylogo
+    };
+    this.handleMouseOver = this.handleMouseOver.bind(this);
+    this.handleMouseOut = this.handleMouseOut.bind(this);
   }
+
+  handleMouseOver() {
+    this.setState({
+      imgSrc: setlogo
+    });
+  }
+
+  handleMouseOut() {
+    this.setState({
+      imgSrc: trylogo
+    });
+  }
+
   render(){
     return(
       <React.Fragment>
@@ -19,15 +35,18 @@ export default class Navigation extends Component {
         Students don't need to draw on paper anymore and they get feedback for their sollutions.</p>
         <p>This software allows the users to test their knowledge on exiting examples
         in form of a quiz or they can create their own reactions and tasks.</p>
-        <p>In the Materials section are their uploaded materials on chemistry theory.</p>
+        <p>This application was created as a project for Web design Technology and Methodology.</p>
       </div>
       </section>
       <aside>
-      <img src={trylogo} onClick={() => {
+        <img  onClick={() => {
           this.props.history.push('/quiz');
-        }}className="try" alt="try"/>
+        }}
+        onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} src={this.state.imgSrc}
+        className="try" alt="try"/>
       </aside>
       </React.Fragment>
+
       /*
       <div style={{padding: "20px"}}>
         <Alert color="info">

@@ -14,7 +14,7 @@ body{
 
     grid-template-areas:
 
-    "grid-H    grid-N     grid-N      grid-N   grid-N   grid-N     grid-N     grid-N          grid-N         grid-N "
+    "grid-H    grid-B     grid-N      grid-N   grid-N   grid-N     grid-N     grid-N          grid-N         grid-N "
     "  grid-S       grid-S        grid-S     grid-S    grid-S    grid-S   grid-S              grid-S             grid-S               grid-S "
 		"  grid-A       grid-A         grid-A     grid-A    grid-A    grid-A   grid-A              grid-A             grid-A               grid-A "
     "grid-F    grid-F     grid-F       grid-F   grid-F   grid-F    grid-F       grid-F         grid-F          grid-F"
@@ -30,29 +30,10 @@ footer{
 	flex-direction: column;
   justify-content: center;
   align-items: center;
-	height: 150px;
 }
 footer p{
   margin:3px;
 	color: white;
-}
-
-.iconbox {
-	display: flex;
-	flex-direction: row;
-  justify-content: center;
-  align-items: center;
-	margin: 3px;
-}
-
-#ico {
-	color: white;
-	font-size: 1.8em;
-	padding: 15px 25px 0 25px;
-}
-
-#ico:hover {
-	color: #9EC1A3;
 }
 
 header{
@@ -83,10 +64,7 @@ header{
 #butt{
 	text-decoration: none;
 	color: #9EC1A3;
-	font-size: 1.5em;
-}
-#butt:hover{
-	color: white;
+	font-size: 18pt;
 }
 
 nav{
@@ -103,16 +81,31 @@ nav ul{
 
 .nav-link{
 	text-decoration: none;
-	font-size: 1.5em;
+	color: white;
+	font-size: 18pt;
 	border-radius: 22px;
 	transition: background-color 0.4s;
 }
 .nav-link:hover {
+	color: white;
+	border-radius: 22px;
 	background-color: #59a8c2;
 }
 
 nav ul a.active{
+	color: white;
+	border-radius: 22px;
 	background-color: #59a8c2;
+}
+
+
+.blue{
+	grid-area: grid-B;
+	background-color: #40798C;
+}
+.blue2{
+	grid-area: grid-B2;
+	background-color: #40798C;
 }
 
 section{
@@ -235,4 +228,11 @@ section button{
 
 .progress{
 	flex-direction: row;
+}
+.navbar-toggler{
+	margin-left: 70%;
+}
+.collapse.show.navbar-collapse{
+	background-color: #40798C;
+	width: 100%;
 }
