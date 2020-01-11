@@ -110,6 +110,12 @@ export default class Quiz extends Component {
       result: this.state.reaction.map((r, index) => (r !== null ? (parseInt(this.state.counts[this.state.category.value]) + 1 + index).toString() : null)).filter(x => x).join("-"),
       structure: this.state.reaction.map((r, index) => (r !== null ? ((index-1) % 3 === 0 ? "u" : ((index-2) % 3 === 0 ? "d" : "m" )) : null)).filter(x => x).join("-"),
     }
+
+		if (this.state.category.value === 'balancing'){
+			body["show"] = body.result.split("-")[0];
+			body["question"] = 'Balance the following chemical equation using the smallest possible coefficients. A "blank" coefficient is equivalent to "1".';
+		}
+
     let newCounts = {...this.state.counts};
     newCounts[this.state.category.value] = this.state.counts[this.state.category.value] + this.state.reaction.length;
 
