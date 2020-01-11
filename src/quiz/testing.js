@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import {rebase} from "../index";
 import Wrapper from "./wrapper";
 
 export default class Testing extends Component {
@@ -41,6 +42,17 @@ export default class Testing extends Component {
     }, () => this.createQuestion(false))
   }
 
+  componentDidMount(){
+    rebase.get("counts", {
+      context: this,
+    }).then(data => {
+      this.setState({
+        counts: {...data[0], temp: 0},
+      });
+    }).catch(err => {
+    });
+  }
+
   createQuestion(newQuiz){
     let id = Math.floor(Math.random() * 10);
     while (id === this.state.lastId){
@@ -48,23 +60,62 @@ export default class Testing extends Component {
     }
 
     let res = this.state.results[id].result.split("-");
+    //fakeResTotalCount depends on quiz type:
+    //organicChemistry : res.length
+    //balancing equations : res.length is only 2, fakeResTotalCount = 6
+    //chemical compounds : res.length = 1, fakeResTotalCount = 6
+    let fakeResTotalCount = res.length;
+    if (res.length <= 2){
+      fakeResTotalCount = 6;
+    }
+
     let fakeRes = [];
-    for (var i = 0; i < res.length; i++) {
-      let n = (Math.floor(Math.random() * 60) + 1).toString();
+
+    //counts -> number of images for given category in DB
+    //as we dont have category name, its done based on length of result
+    let counts = 0;
+    if (res.length == 1){
+      counts = this.state.counts['compounds'];
+    }
+    else if (res.length == 2) {
+      counts = this.state.counts['balancing'];
+    }
+    else {
+      counts = this.state.counts['organicChemistrySynthesis'];
+    }
+
+
+    for (var i = 0; i < fakeResTotalCount; i++) {
+      let n = (Math.floor(Math.random() * counts) + 1).toString();
       while (res.includes(n) || fakeRes.includes(n)){
-        n = (Math.floor(Math.random() * 60) + 1).toString();
+        n = (Math.floor(Math.random() * counts) + 1).toString();
       }
       fakeRes.push(n.toString());
     }
     let imgs = [...this.state.images.filter(img => (res.includes(img.id) || fakeRes.includes(img.id)))];
 
     let ans = Array(res.length).fill(0);
-    let filled = Math.floor(Math.random() * res.length)-2;
+    //chemical compounds
+    let filled = 0;
+    //balancing equations
+    if (res.length == 2){
+      filled = 1;
+    }
+    //organic chemistry synthesis
+    else if (res.length > 2) {
+      filled = Math.floor(Math.random() * res.length)-2;
+    }
     for (var j = 0; j < filled; j++) {
       let img = Math.floor(Math.random() * res.length);
       ans[img] = parseInt(res[img]);
     }
-
+    let textToShow = `Fill in the missing parts of the ${this.state.results[id].name}`;
+    if (res.length == 2){
+      textToShow = `Balance the following chemical equation using the smallest possible coefficients`;
+    }
+    else if (res.length == 1){
+      textToShow = `Choose correct formula of compound ${this.state.results[id].name}`;
+    }
     this.setState({
       reaction: this.state.results[id],
       reactionImages: imgs,
@@ -75,6 +126,7 @@ export default class Testing extends Component {
       end: false,
       answerStatus: 0,
       lastId: id,
+      textToShow: textToShow
     })
   }
 
@@ -109,12 +161,10 @@ export default class Testing extends Component {
           <h1>
             {`Question no. ${this.state.counter}`}
           </h1>
-        }
-
-        {this.state.reaction &&
+        }        {this.state.reaction &&
           !this.state.end &&
           <h1>
-          {`Fill in the missing parts of the ${this.state.reaction.name}`}
+          {this.state.textToShow}
           </h1>
         }
           <div className="wrapper">
