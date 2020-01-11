@@ -175,7 +175,25 @@ export default class Wrapper extends Component {
         </Button>
         <Button
           color="warning ml-auto"
-          onClick={() => this.props.createQuestion(false)}
+          onClick={() =>
+            {
+              console.log(this.props.counter);
+              console.log(this.props.selectedOption);
+
+              if (this.props.counter === this.props.selectedOption){
+                let qData = this.props.endQuiz();
+                this.setState({
+                    qTotalQuestions: qData[0],
+                    qAnsweredQuestions: qData[1],
+                    qCorrectQuestions: qData[2],
+                    endQuiz: true,
+                  })
+              }
+              else{
+                this.props.createQuestion(false)
+              }
+            }
+          }
           >
           New Question
         </Button>

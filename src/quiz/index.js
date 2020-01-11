@@ -4,6 +4,7 @@ import {rebase} from "../index";
 import firebase from 'firebase';
 import { DndProvider } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
+import QuizForm from "./setparams"
 
 export default class Quiz extends Component {
   constructor(props){
@@ -11,21 +12,43 @@ export default class Quiz extends Component {
     this.state = {
       results: [],
       images: [],
+      data: false,
+      value: null,
+      selectedOption: null,
     }
+    this.startQuiz.bind(this);
+    this.getData.bind(this);
   }
 
-  componentDidMount(){
-    rebase.get("results", {
+  startQuiz(info) {
+    console.log(info);
+    this.setState({data: !this.state.data, value:info.value, selectedOption:info.selectedOption}, ()=>this.getData());
+  }
+
+  getData(){
+    rebase.get(this.state.value, {
       context: this,
       withIds: true,
     }).then(data => {
       let storage = firebase.storage().ref();
+      let j = 0;
+      if (this.state.value === "compounds"){
+        j = 25;
+      }
+      else if (this.state.value === "balancing"){
+        j = 20;
+      }
+      else{
+        j = 81;
+      }
+      console.log(this.state.value);
       //"https://firebasestorage.googleapis.com/v0/b/awesometeamone-8ab5b.appspot.com/o/default%2F7.jpg?alt=media&token=b8f0423a-f33c-476f-9caa-b3e30b8ab094"
-      for (var i = 1; i <= 67; i++) {
-        storage.child(`default/${i}.jpg`).getDownloadURL().then((url) => {
+      //gs://awesometeamone-8ab5b.appspot.com/organicChemistrySynthesis/1.jpg
+      for (var i = 1; i <= j; i++) {
+        storage.child(`${this.state.value === "results" ? "organicChemistrySynthesis" : this.state.value }/${i}.jpg`).getDownloadURL().then((url) => {
           let index = 0;
           let end = url.indexOf(".jpg?alt=media&");
-          let start = url.indexOf("default%2F")+10;
+          let start = url.indexOf(`${this.state.value === "results" ? "organicChemistrySynthesis" : this.state.value }%2F`)+(this.state.value === "results" ? 28 : 12  );;
           index = url.slice(start, end);
           this.setState({images: this.state.images.concat([{url: url, id: index}])});
         })
@@ -42,9 +65,16 @@ export default class Quiz extends Component {
   render(){
     return(
       <section className="quiz">
-          <DndProvider backend={HTML5Backend}>
-            <Testing results={this.state.results} images={this.state.images}/>
-          </DndProvider>
+      {
+        this.state.data &&
+        <DndProvider backend={HTML5Backend}>
+          <Testing results={this.state.results} images={this.state.images} value={this.state.value} selectedOption={this.state.selectedOption}/>
+        </DndProvider>
+      }
+      {
+        !this.state.data &&
+          <QuizForm startQuiz={(e) => this.startQuiz(e)}/>
+      }
       </section>
     )
   }
