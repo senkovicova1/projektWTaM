@@ -4,7 +4,10 @@ import {rebase} from "../index";
 import firebase from 'firebase';
 import { DndProvider } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
-import QuizForm from "./setparams"
+import TouchBackend from 'react-dnd-touch-backend';
+import QuizForm from "./setparams";
+
+import {isMobile} from 'react-device-detect';
 
 export default class Quiz extends Component {
   constructor(props){
@@ -67,10 +70,18 @@ export default class Quiz extends Component {
       <section className="quiz">
       {
         this.state.data &&
+        !isMobile &&
         <DndProvider backend={HTML5Backend}>
           <Testing results={this.state.results} images={this.state.images} value={this.state.value} selectedOption={this.state.selectedOption}/>
         </DndProvider>
       }
+     {
+       this.state.data &&
+       isMobile &&
+       <DndProvider backend={TouchBackend}>
+         <Testing results={this.state.results} images={this.state.images} value={this.state.value} selectedOption={this.state.selectedOption}/>
+       </DndProvider>
+     }
       {
         !this.state.data &&
           <QuizForm startQuiz={(e) => this.startQuiz(e)}/>

@@ -116,13 +116,13 @@ class Login extends Component {
     let IS_DISABLED = true;
     if (this.state.activeTab === "1"){
       IS_DISABLED = this.state.logMail.length === 0 ||
-                    this.state.logPassword.length <= 6;
+                    this.state.logPassword.length < 6;
     } else if (this.state.activeTab === "2"){
       IS_DISABLED = this.state.regName.length === 0 ||
                     this.state.regMail.length === 0 ||
                     !isEmail(this.state.regMail) ||
-                    this.state.regPassword1.length <= 6 ||
-                    this.state.regPassword2.length <= 6 ||
+                    this.state.regPassword1.length < 6 ||
+                    this.state.regPassword2.length < 6 ||
                     this.state.regPassword1 !== this.state.regPassword2;
     }
 
