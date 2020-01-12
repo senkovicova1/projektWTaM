@@ -10,6 +10,23 @@ import { logOut } from "./redux/actions";
 
 import Login from "./login";
 
+export default class Navbar extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      modalOpen: false,
+      
+    }
+  }
+
+  render(){
+    return(
+      <div>
+      </div>
+    );
+  }
+}
+
 const Navigation = (props) => {
   NavbarBrand.propTypes = {
     tag: PropTypes.oneOfType([PropTypes.func, PropTypes.string])
