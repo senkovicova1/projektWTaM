@@ -19,6 +19,7 @@ const style = {
 
 
 export const Dustbin = ({
+  index,
   key,
   id,
   type,
@@ -75,21 +76,54 @@ export const Dustbin = ({
     return d;
   }
 
+  function findDiff2(id) {
+    let s = structure.split("-");
+    let d = 0;
+
+    if (id === 0){
+      return d;
+    }
+
+    for (var i = 1; i <= id; i++) {
+      if (s[i] === "m"){
+        d += 2;
+      }
+    }
+    if (s[0]==="m"){
+      d = d+1;
+    }
+    if (s[id]==="m"){
+      d = d-1;
+    }
+    return d;
+  }
+
   const diff = findDiff();
-  const y = 0;
+  let y = 0;
+
+//  console.log(window.innerWidth);
+  console.log(findDiff2(index));
+  console.log(structure.split("-")[index]);
+
+  if (window.innerWidth<=759){
+    y = index * 140 + (findDiff2(index)*20);
+    let pos =  structure.split("-").splice(index, structure.split("-").length);
+    //y = y + pos.filter(p => p === "m").length*30;
+  }
+
 
    const typeStyle = {
      "m": {
-       left:  150*(id-diff) + 20*(id-diff)  + "px",
-       top: 70 + y +"px",
+       left:  (window.innerWidth <= 659 ? "30px" : (150*(id-diff) + 20*(id-diff)  + "px")) ,
+       top: (window.innerWidth <= 659 ? y +"px" : 70 + y +"px"),
      },
      "u": {
-       left: 150*(id-diff) + 20*(id-diff)  + "px",
+       left: (window.innerWidth <= 659 ? "30px" : (150*(id-diff) + 20*(id-diff)  + "px")),
        top: y +"px",
      },
      "d": {
-       left: 150*(id-diff-1) + 20*(id-diff-1)  + "px",
-       top: 140 + y +"px"
+       left: (window.innerWidth <= 659 ? "30px" : (150*(id-diff-1) + 20*(id-diff-1)  + "px")),
+       top: (window.innerWidth <= 659 ? y+"px" : 140 + y +"px"),
      },
    }
 

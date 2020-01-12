@@ -23,7 +23,10 @@ export default class Wrapper extends Component {
     }
     this.handleDrop.bind(this);
     this.setData.bind(this);
+    this.findDiff.bind(this);
+    this.findDiff2.bind(this);
     this.setData(props);
+
   }
 
   UNSAFE_componentWillReceiveProps(props){
@@ -76,10 +79,63 @@ export default class Wrapper extends Component {
     })
   }
 
+  findDiff2(id) {
+    let s = this.state.reaction.structure.split("-");
+    let d = 0;
+
+    if (id === 0){
+      return d;
+    }
+
+    for (var i = 1; i <= id; i++) {
+      if (s[i] === "m"){
+        d += 2;
+      }
+    }
+    if (s[0]==="m"){
+      d = d+1;
+    }
+    if (s[id]==="m"){
+      d = d-1;
+    }
+    return d;
+  }
+
+  findDiff(id) {
+    let s = this.state.reaction.structure.split("-");
+    let k = 0;
+    let m = 0;
+
+    for (var i = 1; i <= s.length; i++) {
+      if (s[i] === "m"){
+        if (s[i-1] !== "d"){
+          k += 1;
+        }
+      } else if (s[i] === "u"){
+
+      } else {
+          k+= 1;
+      }
+      if (k == id+1){
+        m = i;
+        break;
+      }
+    }
+    let f = 0;
+    if (s[m]==="m"){
+      f = 20;
+    }
+
+    return m * 140 + (this.findDiff2(m)*20) - 40 - f;
+  }
+
   render(){
+    console.log(this.state.reaction ? this.state.reaction.structure : "");
+
     if (this.state.endQuiz){
       return(
         <div className="main">
+        <div className="end">
           <h1>
             Quiz finished!
           </h1>
@@ -107,6 +163,7 @@ export default class Wrapper extends Component {
             Do quiz again!
           </Button>
         </div>
+        </div>
       );
     }
     let arrows = [];
@@ -119,6 +176,7 @@ export default class Wrapper extends Component {
       }
       arrows = Array(arrows).fill(0);
     }
+    console.log(this.state.spaces);
     return(
       <div className="main">
       <div className="dustbin">
@@ -126,6 +184,7 @@ export default class Wrapper extends Component {
         {
           this.state.spaces.map(({id, type, lastDroppedItem, correctItem, accepts}, index) => (
             <Dustbin
+              index={index}
               key={id}
               id={id}
               accepts={accepts}
@@ -140,9 +199,12 @@ export default class Wrapper extends Component {
         {
           arrows.map((a, index) =>
             {
-              let l = 170 + 150*(index*2) + 20*index*2;
+              //let t = (window.innerWidth <= 659 ? this.findDiff(index) : "100px");
+              let t = (window.innerWidth <= 659 ? this.findDiff(index)+"px" : "100px");
+              let l = (window.innerWidth <= 659 ? "30px" : 170 + 150*(index*2) + 20*index*2 + "px");
+
               return (
-                <div key={index} style={{ position: "absolute", left: l, top: '100px'}}>
+                <div key={index} style={{ position: "absolute", left: l, top: t}}>
                   <img src={arrow} alt="img" height="40px" width="150px" style={{display: "block",  marginLeft: "auto",  marginRight: "auto", borderRadius: "10px", border: "0px solid #555"}}/>
                 </div>
               )
@@ -179,6 +241,9 @@ export default class Wrapper extends Component {
           color="warning ml-auto"
           onClick={() =>
             {
+              console.log(this.props.counter);
+              console.log(this.props.selectedOption);
+
               if (this.props.counter === this.props.selectedOption){
                 let qData = this.props.endQuiz();
                 this.setState({

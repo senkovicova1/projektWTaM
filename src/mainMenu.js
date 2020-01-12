@@ -29,7 +29,7 @@ export default class Navigation extends Component {
       <React.Fragment>
       <section className="sec">
       <div>
-       <h2>About us</h2>
+       <h1>About us</h1>
         <p>The application was developed as an auxilary software for students and helps
         them by practising and learning chemical reactions.
         Students don't need to draw on paper anymore and they get feedback for their sollutions.</p>
