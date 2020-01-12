@@ -251,7 +251,10 @@ class AddReaction extends Component {
           <div className="row">
             <label className="note">*Note: You don't have to fill in parts above and below the arrow, if your reaction lack those.</label>
             <label className="note">If you accidentally enlarge your reaction, you can simply leave the ends epmty.</label>
+          </div>
 
+					<div className="row">
+            <label className="note">Reactants should be placed above the arrow and the conditions should go below.</label>
           </div>
 
 

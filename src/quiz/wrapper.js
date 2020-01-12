@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Button, Progress } from "reactstrap";
+import {Button, Progress, Alert } from "reactstrap";
 import Dustbin from './bin';
 import Box from './box';
 
@@ -19,6 +19,8 @@ export default class Wrapper extends Component {
       qTotalQuestions: 0,
       qAnsweredQuestions: 0,
       qCorrectQuestions: 0,
+
+      showError: false,
     }
     this.handleDrop.bind(this);
     this.setData.bind(this);
@@ -35,6 +37,7 @@ export default class Wrapper extends Component {
     } if (props.answerStatus !== this.props.answerStatus){
       this.setState({
         answerStatus: props.answerStatus,
+        showError: false,
       })
     }
   }
@@ -211,6 +214,10 @@ export default class Wrapper extends Component {
         </div>
       </div>
 
+      <Alert color="danger" className="flex w-100 m-t-20" isOpen={this.state.showError}>
+        You have to fill all fields in the reaction!
+      </Alert>
+
       <div className="button-row">
         <Button
           color="info"
@@ -229,8 +236,15 @@ export default class Wrapper extends Component {
         </Button>
         <Button
           color="success ml-auto"
-          disabled={this.state.spaces.filter(sp => sp.lastDroppedItem === null).length > 0}
-          onClick={() => this.props.checkAnswer()}
+          onClick={() => {
+            if (this.state.spaces.filter(sp => sp.lastDroppedItem === null).length > 0) {
+              this.setState({
+                showError: true,
+              })
+            } else {
+              this.props.checkAnswer()}
+              }
+            }
           >
           Check!
         </Button>
