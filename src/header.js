@@ -14,7 +14,7 @@ class Head extends Component {
     super(props);
     this.state = {
       loginOpen: false,
-      navOpen: true,
+      navOpen: false,
     }
     this.toggleNav.bind(this);
     this.toggleLogin.bind(this);
