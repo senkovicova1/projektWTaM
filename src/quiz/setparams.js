@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import Wrapper from "./wrapper";
 import {Button} from "reactstrap";
 import Select from 'react-select';
 
@@ -45,7 +44,7 @@ const STORAGES = [{label: "Syntheses from organic chemistry", value: "organicChe
                   {label: "Balancing chemical reactions", value: "balancing"},
                   {label: "Chemical compounds", value: "compounds"},]
 
-export default class QuizForm extends React.Component {
+export default class QuizForm extends Component {
   constructor(props) {
     super(props);
     this.state = {category: {label: "Syntheses from organic chemistry", value: "organicChemistrySynthesis"},selectedOption: 5};
@@ -62,18 +61,13 @@ export default class QuizForm extends React.Component {
 
 
   handleSubmit(event) {
-    //alert('Your favorite flavor is: ' + this.state.value + '         you chose: ' + this.state.selectedOption);
-    //event.preventDefault();
-    console.log(this.state);
     this.props.startQuiz(this.state);
   }
   handleOptionChange(event) {
-    console.log(event.target.value);
     this.setState({selectedOption: event.target.value});
   }
 
   render() {
-    console.log(this.state.selectedOption);
     return (
       <form className="choose-form">
         <h1>Choose the number of questions and category:</h1>
@@ -84,7 +78,7 @@ export default class QuizForm extends React.Component {
                 type="radio"
                 name="react-tips"
                 value={5}
-                checked={this.state.selectedOption == 5}
+                checked={parseInt(this.state.selectedOption) === 5}
                 onChange={this.handleOptionChange}
                 className="form-check-input"
               />
@@ -98,7 +92,7 @@ export default class QuizForm extends React.Component {
                 type="radio"
                 name="react-tips"
                 value={10}
-                checked={this.state.selectedOption == 10}
+                checked={parseInt(this.state.selectedOption) === 10}
                 onChange={this.handleOptionChange}
                 className="form-check-input"
               />
@@ -112,7 +106,7 @@ export default class QuizForm extends React.Component {
                 type="radio"
                 name="react-tips"
                 value={20}
-                checked={this.state.selectedOption == 20}
+                checked={parseInt(this.state.selectedOption) === 20}
                 onChange={this.handleOptionChange}
                 className="form-check-input"
               />
@@ -126,7 +120,7 @@ export default class QuizForm extends React.Component {
                 type="radio"
                 name="react-tips"
                 value={10000}
-                checked={this.state.selectedOption == 10000}
+                checked={parseInt(this.state.selectedOption) === 10000}
                 onChange={this.handleOptionChange}
                 className="form-check-input"
               />

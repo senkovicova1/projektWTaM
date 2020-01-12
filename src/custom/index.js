@@ -4,6 +4,8 @@ import { Input, Button, Alert  } from "reactstrap";
 import firebase from 'firebase';
 import Select from 'react-select';
 
+import { connect } from "react-redux";
+
 import FileUploader from "react-firebase-file-uploader";
 
 import arrow from '../scss/arrow.jpg';
@@ -70,7 +72,7 @@ const style = {
 const y = 0;
 
 
-export default class Quiz extends Component {
+class AddReaction extends Component {
   constructor(props){
     super(props);
     this.state = {
@@ -120,23 +122,23 @@ export default class Quiz extends Component {
     newCounts[this.state.category.value] = this.state.counts[this.state.category.value] + this.state.reaction.length;
 
     rebase.addToCollection((this.state.category.value !== "organicChemistrySynthesis" ? this.state.category.value : "results"), body)
-    .then(() => {
+    .then((reaction) => {
       rebase.updateDoc('counts/MszjsdeErfZclNryTGgA', newCounts)
         .then(() => {
-          this.setState({
-            saved: true,
-            name: "",
-            category: null,
-            reaction: [null, null, null, null],
+							this.setState({
+								saved: true,
+								name: "",
+								category: null,
+								reaction: [null, null, null, null],
 
-            isUploading: false,
-            counts: newCounts,
-          })
+								isUploading: false,
+								counts: newCounts,
+							})
         }).catch(err => {
-        //handle error
+        console.log(err);
       });
     }).catch(err => {
-    //handle error
+    console.log(err);
   });
 
   }
@@ -189,6 +191,10 @@ export default class Quiz extends Component {
   }
 
   render(){
+		if (!this.props.loggedIn) {
+			return(<div></div>)
+		}
+
     let arrows = Array.from({length: Math.floor((this.state.reaction.length - 1)/3)}, (v, i) => "-");
 
     let len = this.state.reaction.length;
@@ -323,7 +329,17 @@ export default class Quiz extends Component {
 
           <Button
             color="success"
-            disabled={!this.state.name || !this.state.category || this.state.reaction.some((r, index) => index % 3 === 0 && r === null)}
+            disabled={!this.state.name ||
+							!this.state.category ||
+							(
+								((this.state.reaction.some((r, index) => (index -1) % 3 === 0 && r !== null) ||
+									this.state.reaction.some((r, index) => (index -2) % 3 === 0 && r !== null)) &&
+									this.state.reaction.some((r, index) => index % 3 === 0 && r === null)
+								)
+								||
+							 !(this.state.reaction[0] !== null && this.state.reaction.filter((r,index) => index !== 0).every((r, index) => r === null))
+							)
+						}
             onClick={() => this.submit()}>
             Save!
           </Button>
@@ -333,3 +349,11 @@ export default class Quiz extends Component {
     )
   }
 }
+
+
+const mapStateToProps = (store) => {
+  const { loggedIn} = store;
+  return { loggedIn};
+};
+
+export default connect(mapStateToProps, {})(AddReaction);

@@ -1,16 +1,16 @@
 import { REGISTER, LOG_IN, LOG_OUT } from "../constants";
 
 const initialState = {
-  user: null
+  user: null,
+  loggedIn: false,
 };
 function rootReducer(state = initialState, action) {
   if (action.type === REGISTER) {
-    return {...state, user: action.payload};
+    return {...state, user: action.user, loggedIn: true};
   } else if (action.type === LOG_IN) {
-    return {...state, user: action.payload};
+    return {...state, user: action.user, loggedIn: true};
   } else if (action.type === LOG_OUT) {
-    console.log("logging out");
-    return {...state, user: null};
+    return initialState;
   }
   return state;
 };

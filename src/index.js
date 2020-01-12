@@ -1,15 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {BrowserRouter, Route} from 'react-router-dom';
+import { Provider } from 'react-redux';
 import Navigation from './navigation';
 
 import config from './firebase';
 import Firebase from 'firebase';
 import base from 're-base';
 
+import createStore from './redux/store';
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './scss/style.css';
 
+const store = createStore();
 
 const app = Firebase.initializeApp(config);
 let db = Firebase.firestore(app);
@@ -21,11 +25,11 @@ export let firebase = db;
 const Root = () => {
   return(
     <React.Fragment>
-      <BrowserRouter>
-        <React.Fragment>
-          <Route path='/' component={Navigation} />
-        </React.Fragment>
-      </BrowserRouter>
+      <Provider store={store}>
+        <BrowserRouter>
+            <Route path='/' component={Navigation} />
+        </BrowserRouter>
+      </Provider>
     </React.Fragment>
   )
 }

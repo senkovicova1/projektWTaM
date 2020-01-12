@@ -101,14 +101,9 @@ export const Dustbin = ({
   const diff = findDiff();
   let y = 0;
 
-//  console.log(window.innerWidth);
-  console.log(findDiff2(index));
-  console.log(structure.split("-")[index]);
 
   if (window.innerWidth<=759){
     y = index * 140 + (findDiff2(index)*20);
-    let pos =  structure.split("-").splice(index, structure.split("-").length);
-    //y = y + pos.filter(p => p === "m").length*30;
   }
 
 

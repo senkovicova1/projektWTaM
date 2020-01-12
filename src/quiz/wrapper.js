@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import {Button, Progress } from "reactstrap";
 import Dustbin from './bin';
 import Box from './box';
-import ItemTypes from './constants';
 
 import arrow from '../scss/arrow.jpg';
 
@@ -65,7 +64,7 @@ export default class Wrapper extends Component {
                }
               return ({
                  id: index,
-                 accepts: [ItemTypes.IMAGE],
+                 accepts: ['image'],
                  type: data.reaction.structure.split("-")[index],
                  correctItem: i,
                  lastDroppedItem: ldi})
@@ -116,7 +115,7 @@ export default class Wrapper extends Component {
       } else {
           k+= 1;
       }
-      if (k == id+1){
+      if (k === id+1){
         m = i;
         break;
       }
@@ -130,7 +129,6 @@ export default class Wrapper extends Component {
   }
 
   render(){
-    console.log(this.state.reaction ? this.state.reaction.structure : "");
 
     if (this.state.endQuiz){
       return(
@@ -176,7 +174,6 @@ export default class Wrapper extends Component {
       }
       arrows = Array(arrows).fill(0);
     }
-    console.log(this.state.spaces);
     return(
       <div className="main">
       <div className="dustbin">
@@ -241,9 +238,6 @@ export default class Wrapper extends Component {
           color="warning ml-auto"
           onClick={() =>
             {
-              console.log(this.props.counter);
-              console.log(this.props.selectedOption);
-
               if (this.props.counter === this.props.selectedOption){
                 let qData = this.props.endQuiz();
                 this.setState({
@@ -269,7 +263,7 @@ export default class Wrapper extends Component {
                  <Box
                    url={val.url}
                    id={val.id}
-                   type={ItemTypes.IMAGE}
+                   type={"image"}
                    isDropped={false}
                    key={val.id}
                  />

@@ -1,15 +1,15 @@
 import React, {Component} from 'react';
-import { Button, Input, TabContent, TabPane, Nav, NavItem, NavLink, Card, CardTitle, CardText, Row, Col, Alert, Spinner  } from 'reactstrap';
+import { Button, Input, TabContent, TabPane, Nav, NavItem, NavLink, Row, Col, Alert, Spinner  } from 'reactstrap';
 
 import firebase from 'firebase';
 import {rebase} from './index';
-import store from "./redux/store";
+import { connect } from "react-redux";
 import { register, logIn } from "./redux/actions";
 
 import {isEmail} from "./helperFunctions";
 import classnames from 'classnames';
 
-export default class Footer extends Component {
+class Login extends Component {
   constructor(props){
     super(props);
     this.state = {
@@ -53,27 +53,6 @@ export default class Footer extends Component {
     }, () => this.props.close());
   }
 
-/*
-myFirebase
-   .auth()
-   .signOut()
-   .then(() => {
-     dispatch(receiveLogout());
-   })
-   .catch(error => {
-     //Do something with the error if you want!
-     dispatch(logoutError());
-   });
-
-
-   myFirebase.auth().onAuthStateChanged(user => {
-    if (user !== null) {
-      dispatch(receiveLogin(user));
-    }
-    dispatch(verifySuccess());
-  });
-*/
-
   logOrReg(){
     this.setState({
       saving: true,
@@ -86,7 +65,7 @@ myFirebase
           this.setState({
             saving: false,
           }, () => {
-            store.dispatch( register({ uid: user.uid, username: user.username}) );
+            this.props.register({ uid: user.uid, username: user.username});
             this.props.close();
           });
         });
@@ -118,7 +97,7 @@ myFirebase
 
               error: "",
             }, () => {
-              store.dispatch( register({ uid: res.user.uid, username}) );
+              this.props.logIn({ uid: res.user.uid, username});
               this.props.close();
             });
           }).catch(err => {
@@ -250,3 +229,9 @@ myFirebase
     );
   }
 }
+
+const mapStateToProps = () => {
+  return {};
+};
+
+export default connect(mapStateToProps, { register, logIn })(Login);

@@ -1,13 +1,20 @@
 import { REGISTER, LOG_IN, LOG_OUT } from "../constants";
 
-export function register(payload) {
-  return { type: REGISTER, payload: {uid: payload.uid, username: payload.username}}
+
+export const register = (user) => {
+  return (dispatch) => {
+    dispatch({ type: REGISTER, user });
+  };
 };
 
-export function logIn(payload) {
-  return { type: LOG_IN, payload: {uid: payload.uid, username: payload.username}}
+export const logIn = (user) => {
+  return (dispatch) => {
+    dispatch({ type: LOG_IN, user });
+  };
 };
 
-export function logOut() {
-  return { type: LOG_OUT }
+export const logOut = () => {
+  return (dispatch) => {
+    dispatch({ type: LOG_OUT});
+  };
 };

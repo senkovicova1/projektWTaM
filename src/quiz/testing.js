@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import {rebase} from "../index";
+import { connect } from "react-redux";
 import Wrapper from "./wrapper";
 
-export default class Testing extends Component {
+class Testing extends Component {
   constructor(props){
     super(props);
     this.state = {
@@ -74,10 +75,10 @@ export default class Testing extends Component {
     //counts -> number of images for given category in DB
     //as we dont have category name, its done based on length of result
     let counts = 0;
-    if (res.length == 1){
+    if (parseInt(res.length) === 1){
       counts = this.state.counts['compounds'];
     }
-    else if (res.length == 2) {
+    else if (parseInt(res.length) === 2) {
       counts = this.state.counts['balancing'];
     }
     else {
@@ -98,7 +99,7 @@ export default class Testing extends Component {
     //chemical compounds
     let filled = 0;
     //balancing equations
-    if (res.length == 2){
+    if (parseInt(res.length) === 2){
       filled = 1;
     }
     //organic chemistry synthesis
@@ -110,10 +111,10 @@ export default class Testing extends Component {
       ans[img] = parseInt(res[img]);
     }
     let textToShow = `Fill in the missing parts of the ${this.state.results[id].name}`;
-    if (res.length == 2){
+    if (parseInt(res.length) === 2){
       textToShow = `Balance the following chemical equation using the smallest possible coefficients`;
     }
-    else if (res.length == 1){
+    else if (parseInt(res.length) === 1){
       textToShow = `Choose correct formula of compound ${this.state.results[id].name}`;
     }
     this.setState({
@@ -147,9 +148,31 @@ export default class Testing extends Component {
   }
 
   endQuiz(){
-    this.setState({
-      end: true,
+    rebase.get(`users/${this.props.user.uid}`, {
+    context: this,
+  }).then(userdata => {
+      console.log(userdata);
+      let body = {
+        username: userdata.username,
+        balancingQ: (userdata.balancingQ ? userdata.balancingQ : 0)  + (this.state.value === "balancing" ? this.state.counter : 0),
+        balancingA: (userdata.balancingA ? userdata.balancingA : 0)  + (this.state.value === "balancing" ? this.state.correctAns : 0),
+        compoundsQ: (userdata.compoundsQ ? userdata.compoundsQ : 0)  + (this.state.value === "compounds" ? this.state.counter : 0),
+        compoundsA: (userdata.compoundsA ? userdata.compoundsA : 0)  + (this.state.value === "compounds" ? this.state.correctAns : 0),
+        organicChemistrySynthesisQ: (userdata.organicChemistrySynthesisQ ? userdata.organicChemistrySynthesisQ : 0)  + (this.state.value === "organicChemistrySynthesis" ? this.state.counter : 0),
+        organicChemistrySynthesisA: (userdata.organicChemistrySynthesisA ? userdata.organicChemistrySynthesisA : 0)  + (this.state.value === "organicChemistrySynthesis" ? this.state.correctAns : 0),
+      }
+      rebase.updateDoc(`users/${this.props.user.uid}`, body)
+      .then(() => {
+        this.setState({
+          end: true,
+        })
+      }).catch(err => {
+      console.log(err);
+    });
+    }).catch(err => {
+      console.log(err);
     })
+
     return [this.state.counter, this.state.answeredAns, this.state.correctAns];
   }
 
@@ -196,3 +219,11 @@ export default class Testing extends Component {
     )
   }
 }
+
+
+const mapStateToProps = (store) => {
+  const {user, loggedIn} = store;
+  return {user, loggedIn};
+};
+
+export default connect(mapStateToProps, {})(Testing);
