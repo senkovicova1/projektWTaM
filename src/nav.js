@@ -16,8 +16,6 @@ const Navigation = (props) => {
     // pass in custom element to use
   }
 
-  store.subscribe(() => console.log('Look ma, Redux!!'));
-
   const [modal, setModal, isOpen, setIsOpen ] = useState(false);
 
   const toggle = () => setIsOpen(!isOpen);
@@ -28,41 +26,45 @@ const Navigation = (props) => {
 
   const toggleLogin = () => setModal(!modal);
 
-  const LOGGED = store.getState().user !== null;
-  console.log(store.getState());
+  var vec = true;
 
   return (
-    <React.Fragment>
+    <React.Fragment >
       <Navbar light expand="md">
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           <Nav className="mr-auto" navbar>
+            <NavItem  onClick={() => {this.vec = !this.vec}}>
+            safsafds
+            </NavItem>
             <NavItem>
               <NavLink style={{color: "white"}} href="/quiz" className={(location.pathname.includes("/quiz") ? "active" : "")}>Quiz</NavLink>
             </NavItem>
             <NavItem>
               <NavLink style={{color: "white"}} href="/add-reaction" className={(location.pathname.includes("/add-reaction") ? "active" : "")}>Add a reaction</NavLink>
             </NavItem>
-            {LOGGED &&
+            {store.getState().user !== null &&
             <NavItem>
               <NavLink style={{color: "white"}} href="/profile" className={(location.pathname.includes("/profile") ? "active" : "")}>Profile</NavLink>
             </NavItem>
             }
-            {!LOGGED &&
+            {vec &&
               <NavItem>
                 <NavLink style={{color: "orange"}} href="#" div className={(location.pathname.includes("/login") ? "active" : "")} id="butt" onClick={toggleLogin}>Login</NavLink>
               </NavItem>
             }
-            {LOGGED &&
+            {!vec &&
               <NavItem>
                 <NavLink style={{color: "orange"}} href="#" div className={(location.pathname.includes("/login") ? "active" : "")} id="butt" onClick={() => {
                   firebase
                      .auth()
                      .signOut()
                      .then(() => {
-                       store.dispatch(logOut(null));
+                       console.log("logged out");
+                       store.dispatch(logOut());
                      })
                      .catch(error => {
+                       console.log(error);
                      });
                 }}>Log out</NavLink>
               </NavItem>

@@ -5,17 +5,12 @@ const initialState = {
 };
 function rootReducer(state = initialState, action) {
   if (action.type === REGISTER) {
-    return Object.assign({}, state, {
-      user: action.payload
-    });
+    return {...state, user: action.payload};
   } else if (action.type === LOG_IN) {
-    return Object.assign({}, state, {
-      user: action.payload
-    });
+    return {...state, user: action.payload};
   } else if (action.type === LOG_OUT) {
-    return Object.assign({}, state, {
-      user: null
-    });
+    console.log("logging out");
+    return {...state, user: null};
   }
   return state;
 };

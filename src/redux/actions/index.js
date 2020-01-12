@@ -8,6 +8,6 @@ export function logIn(payload) {
   return { type: LOG_IN, payload: {uid: payload.uid, username: payload.username}}
 };
 
-export function logOut(payload) {
+export function logOut() {
   return { type: LOG_OUT }
 };

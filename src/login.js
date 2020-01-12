@@ -98,10 +98,10 @@ myFirebase
       });
     } else {
       firebase.auth().createUserWithEmailAndPassword(this.state.regMail, this.state.regPassword1).then((res) => {
+        let username = this.state.regName;
         let data ={
-          username: this.state.regName,
+          username,
         }
-        let name = this.state.regName;
         rebase.addToCollection('users', data, res.user.uid)
         .then((user) => {
             this.setState({
@@ -118,10 +118,11 @@ myFirebase
 
               error: "",
             }, () => {
-              store.dispatch( register({ uid: res.user.uid, username: name}) );
+              store.dispatch( register({ uid: res.user.uid, username}) );
               this.props.close();
             });
           }).catch(err => {
+            console.log(err);
           //handle error
         });
       }).catch(error => {
